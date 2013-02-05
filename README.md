@@ -1,5 +1,6 @@
 wget_research_paper
 ===================
+
 #description
 script perl to: 
 * easily download the pdf (formated date_title.pdf) 
@@ -24,9 +25,9 @@ the id you find in the URL
 
 for ACM : 
 
-http://dl.acm.org/citation.cfm?id=1136495
+http://dl.acm.org/citation.cfm?id=1136495 the id is 1136495
 
-the id is 1136495
+http://dl.acm.org/citation.cfm?id=384286.264126  the is 264126
 
 for Springer :
 

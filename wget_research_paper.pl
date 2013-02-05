@@ -1,17 +1,35 @@
+#!/usr/bin/perl -s
+
 ################
+# This file is part of wgetpaper.
+#
+# Wgetpaper is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Wgetpaper is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+#
 # Required : xclip, curl
 #######
-
-#!/bin/env perl
+# -s allow "switchs" in the command, useful for -x
 use strict;
 use warnings;
+use vars qw/ $x /;
 
 # ------------------------------------ USAGE --------------------------------- #
 sub usage {
 	my $name = $0;
-	print "\n usage : $name HANDLED_WEBSITE IDFROMWEBSITE\n"; 
-	print "HANDLED_WEBSITE : a(cm) , s(pringer) \n";
-	print "output : the file DATE_TITLE.pdf  + bibtex in the clipboard \n";
+	print "\n usage : $name [-x=LATEX_SECTION] HANDLED_WEBSITE IDFROMWEBSITE\n"; 
+	print "\t -x : print \\LATEX_SECTION{title} \\cite{bibtexkey}\\\\ ";
+	print "\t HANDLED_WEBSITE : a(cm) , s(pringer) \n";
+	print "\t output : the file DATE_TITLE.pdf  + bibtex in the clipboard \n";
 
 	exit 1;
 }
@@ -29,6 +47,7 @@ my $idpaper = $ARGV[1];
 #my $idpaper=1454125;
 my $date="1800";
 my $name="crazypaper";
+my $bibkey="0000";
 my $bib = "";
 
 #usefull for info_from_bibtexline, to handle multiline title
@@ -62,6 +81,12 @@ sub info_from_bibtexline {
 	# found DATE
 	if ( $line =~ m/year[^=]*=[^\}]*\{([^\}]+)\}/ ) {
 		$date = "$1";
+	}
+
+	# found Bibtex KEY
+	if ( $line =~ /^\@/ ) {
+		$line =~ m/\{([^,]+),/;
+		$bibkey = $1;
 	}
 
 }
@@ -143,3 +168,7 @@ print "#################### BIBTEX ########################## \n \n";
 print $bib;
 print "\n \n";
 
+if (defined $x) {
+	print "####################### LATEX - NOTE TITLE ################ \n";
+	print "\\$x\{$name\}\n\\cite\{$bibkey\}\n\n";
+}
